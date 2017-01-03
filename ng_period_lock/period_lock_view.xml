@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+        <!--Period lock form view-->
+        <record id='form_view_period_lock' model='ir.ui.view'>
+            <field name='name'>form.view.period.lock</field>
+            <field name='model'>period.lock</field>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'> 
+            	<form string='Period Lock Information' version='7.0'>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="model_id" on_change="on_change_model(model_id)"/>
+                                <field name="date_create"/>
+                                <field name="lock_start_date"/>
+							</group>
+							<group>
+								<field name="resp_user_id"/>
+								<field name="active"/>
+								<field name="lock_end_date"/>
+							</group>
+						</group>
+						<separator string="Access Rights"/>
+						<group>
+							<group>
+								<field name="create"/>
+								<field name="delete"/>
+							</group>
+							<group>
+								<field name="write"/>
+								<field name="duplicate"/>
+							</group>
+						</group>
+						<separator string="States"/>
+						<group>
+							<field name="help_state" placeholder="This field will be autofilled. Please do not change it..."/>
+							<field name="state" placeholder="You can use only one state on single form. For example: draft....."/>
+						</group>
+						<separator string="Users to Lock"/>
+						<group>
+							<field name="user_id" nolabel="1"/>
+						</group>
+						<separator string="Groups to Lock"/>
+						<group>
+							<field name="group_ids" nolabel="1"/>
+						</group>
+						<separator string="Email Templates" invisible="1"/>
+						<group>
+							<group>
+								<field name="email_template_id" invisible="1"/>
+							</group>
+							<group>
+								<field name="company_id"/>
+							</group>
+						</group>
+						<separator string="Warning"/>
+						<group>
+							<field name="warning" nolabel="1"/>
+						</group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!--Period lock tree view-->
+
+        <record id='tree_view_period_lock' model='ir.ui.view'>
+            <field name='name'>tree.view.period.lock</field>
+            <field name='model'>period.lock</field>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <tree string='Period Lock Information'>
+                    <field name="model_id"/>
+                    <field name='state'/>
+                    <field name="lock_start_date"/>
+                    <field name="lock_end_date"/>
+                    <field name="create"/>
+                    <field name="write"/>
+					<field name="duplicate"/>
+					<field name="delete"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+        
+   		<record id="period_lock_search_view" model="ir.ui.view">
+        <field name="name">period.lock.search.view</field>
+        <field name="model">period.lock</field>
+            <field name="arch" type="xml">
+                <search string="Period Lock">
+					<field name="model_id" string="Model" filter_domain="[('model_id','ilike',self)]"/>
+                    <field name="state" string="Lock State" filter_domain="[('state','ilike',self)]"/>
+                    <field name="resp_user_id" string="Responsible" filter_domain="[('resp_user_id','ilike',self)]"/>
+                    <group  expand='0' string='Group by...'>
+                        <filter string='Responsible' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'resp_user_id'}"/>
+						<filter string='Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'model_id'}"/>
+						<filter string='Lock Start Date' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'lock_start_date'}"/>
+                    </group>
+                </search>
+            </field>
+    	</record>
+
+        <record id='action_period_lock' model='ir.actions.act_window'>
+            <field name='name'>Period Locks</field>
+            <field name='res_model'>period.lock</field>
+            <field name='view_type'>form</field>
+            <field name='view_mode'>tree,form</field>
+        </record>
+        
+        <menuitem id="period_lock_menu" name="Configure Period Locks" parent="base.menu_administration"/>
+        <menuitem id="period_lock_sub_menu" name="Period Locks" parent="period_lock_menu" action='action_period_lock'/>
+
+	</data>
+</openerp>
